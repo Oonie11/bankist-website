@@ -47,7 +47,7 @@ btnScrollTo.addEventListener(`click`, function (e) {
   // console.log(s1coord);
   // console.log(e.target.getBoundingClientRect());
   // console.log(`current scroll (x/y)`, window.pageXOffset, pageYOffset);
-  // //to get the height and with of the viewport
+  // //to get the height and width of the viewport
   // console.log(
   //   `height/width viewport`,
   //   document.documentElement.clientHeight,
@@ -106,11 +106,20 @@ const tabsContent = document.querySelectorAll(`.operations__content`);
 
 tabsContainer.addEventListener(`click`, function (e) {
   const clicked = e.target.closest(`.operations__tab`);
-  //GUARD CLAUSE
-  //! if click outside of button a null value is returned resulting in error. below code prevents that error.
+
+  //GUARD CLAUSE //! outside button click gives null error. below code prevents that error.
   if (!clicked) return;
+
+  //remove active classes
+  tabs.forEach((t) => t.classList.remove(`operations__tab--active`));
+  tabsContent.forEach((c) => c.classList.remove("operations__content--active"));
+
+  //active tab
   clicked.classList.add(`operations__tab--active`);
-  console.log(clicked);
+  //activate content area
+  document
+    .querySelector(`.operations__content--${clicked.dataset.tab}`)
+    .classList.add("operations__content--active");
 });
 
 //! /////////////////////////////////////
