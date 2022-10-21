@@ -1,54 +1,55 @@
-"use strict";
+`use strict`;
+
+const btnScrollTo = document.querySelector(`.btn--scroll-to`);
+const section1 = document.querySelector(`#section--1`);
+const modal = document.querySelector(`.modal`);
+const overlay = document.querySelector(`.overlay`);
+const btnCloseModal = document.querySelector(`.btn--close-modal`);
+const btnOpenModal = document.querySelectorAll(`.btn--show-modal`);
 
 ///////////////////////////////////////
 // Modal window
-
-const modal = document.querySelector(".modal");
-const overlay = document.querySelector(".overlay");
-const btnCloseModal = document.querySelector(".btn--close-modal");
-const btnOpenModal = document.querySelectorAll(".btn--show-modal");
+///////////////////////////////////////
 
 const openModal = function (e) {
   e.preventDefault();
-  modal.classList.remove("hidden");
-  overlay.classList.remove("hidden");
+  modal.classList.remove(`hidden`);
+  overlay.classList.remove(`hidden`);
 };
 
 const closeModal = function () {
-  modal.classList.add("hidden");
-  overlay.classList.add("hidden");
+  modal.classList.add(`hidden`);
+  overlay.classList.add(`hidden`);
 };
 
 btnOpenModal.forEach((btn) => {
-  btn.addEventListener("click", openModal);
+  btn.addEventListener(`click`, openModal);
 });
 
 // for (let i = 0; i < btnOpenModal.length; i++)
-//   btnOpenModal[i].addEventListener("click", openModal);
+//   btnOpenModal[i].addEventListener(`click`, openModal);
 
-btnCloseModal.addEventListener("click", closeModal);
-overlay.addEventListener("click", closeModal);
+btnCloseModal.addEventListener(`click`, closeModal);
+overlay.addEventListener(`click`, closeModal);
 
-document.addEventListener("keydown", function (e) {
-  if (e.key === "Escape" && !modal.classList.contains("hidden")) {
+document.addEventListener(`keydown`, function (e) {
+  if (e.key === `Escape` && !modal.classList.contains(`hidden`)) {
     closeModal();
   }
 });
 
 //* IMPLEMENTING SMOOTH SCROLLING
-const btnScrollTo = document.querySelector(".btn--scroll-to");
-const section1 = document.querySelector("#section--1");
 
 // EVENT LISTENER FOR SMOOTH SCROLLING
-btnScrollTo.addEventListener("click", function (e) {
-  const s1coord = section1.getBoundingClientRect();
+btnScrollTo.addEventListener(`click`, function (e) {
+  // const s1coord = section1.getBoundingClientRect();
 
   // console.log(s1coord);
   // console.log(e.target.getBoundingClientRect());
-  // console.log("current scroll (x/y)", window.pageXOffset, pageYOffset);
+  // console.log(`current scroll (x/y)`, window.pageXOffset, pageYOffset);
   // //to get the height and with of the viewport
   // console.log(
-  //   "height/width viewport",
+  //   `height/width viewport`,
   //   document.documentElement.clientHeight,
   //   document.documentElement.clientWidth
 
@@ -62,11 +63,54 @@ btnScrollTo.addEventListener("click", function (e) {
   // window.scrollTo({
   //   left: s1coord.left + window.pageXOffset,
   //   top: s1coord.top + window.pageYOffset,
-  //   behavior: "smooth",
+  //   behavior: `smooth`,
   // });
-
+  console.log(`scroll was clicked`);
   //New method of scrolling
-  section1.scrollTo({ behavior: "smooth" });
+  section1.scrollIntoView({ behavior: `smooth` });
+});
+
+//////////////////////////////////////////////////
+//* (PAGE NAVIGATION) event delegation: implementing page navigation
+//////////////////////////////////////////////////
+//!adding event handler to each property
+// document.querySelectorAll(`.nav__link`).forEach(function (el) {
+//   el.addEventListener(`click`, function (e) {
+//     e.preventDefault();
+//     const id = this.getAttribute(`href`);
+//     console.log(id);
+// document.querySelector(id).scrollIntoView({ behavior: `smooth` });
+//   });
+// });
+
+//*adding event listener using event delegation.
+
+//todo:1 add event listener to common parent element
+//todo:2  determine what event created/originated the event
+
+document.querySelector(`.nav__links`).addEventListener(`click`, function (e) {
+  e.preventDefault();
+  //matching strategy
+  if (e.target.classList.contains(`nav__link`)) {
+    const id = e.target.getAttribute(`href`);
+    document.querySelector(id).scrollIntoView({ behavior: `smooth` });
+  }
+});
+
+//////////////////////////////////////////////////
+//* Tabbed Component
+//////////////////////////////////////////////////
+const tabs = document.querySelectorAll(".operations__tab");
+const tabsContainer = document.querySelector(`.operations__tab-container`);
+const tabsContent = document.querySelectorAll(`.operations__content`);
+
+tabsContainer.addEventListener(`click`, function (e) {
+  const clicked = e.target.closest(`.operations__tab`);
+  //GUARD CLAUSE
+  //! if click outside of button a null value is returned resulting in error. below code prevents that error.
+  if (!clicked) return;
+  clicked.classList.add(`operations__tab--active`);
+  console.log(clicked);
 });
 
 //! /////////////////////////////////////
@@ -74,27 +118,101 @@ btnScrollTo.addEventListener("click", function (e) {
 //! /////////////////////////////////////
 
 ///////////////////////////////////////
+// DOM TRAVERSING
 ///////////////////////////////////////
-// console.log("document", document.documentElement);
-// console.log("document", document.head);
-// console.log("document", document.body);
 
-// const allSections = document.querySelectorAll(".section");
+// const h1 = document.querySelector(`h1`);
+
+// //GOING downwards: Chid
+// console.log(h1.querySelectorAll(`.highlight`));
+// console.log(h1.childNodes);
+// //give us HTML collection which is a live collection
+// console.log(h1.children);
+// h1.firstElementChild.style.color = `white`;
+// h1.lastElementChild.style.color = `orangered`;
+
+// //GOING upwards: Parents
+// console.log(h1.parentNode);
+// console.log(h1.parentElement);
+
+// h1.closest(`.header`).style.background = `var(--gradient-secondary)`;
+
+// h1.closest(`h1`).style.background = `var(--gradient-primary)`;
+
+// //going sideways
+// console.log(h1.previousElementSibling);
+// console.log(h1.nextElementSibling);
+
+// console.log(h1.previousSibling);
+// console.log(h1.nextSibling);
+
+// console.log(h1.parentElement.children);
+// [...h1.parentElement.children].forEach((el) => {
+//   if (el !== h1) el.style.transform = "scale(0.5)";
+// });
+
+//* event listener mouse enter
+// const h1 = document.querySelector(`h1`);
+// const alertH1 = (e) => {
+//   alert(`you entered the heading zone.`);
+//   h1.removeEventListener(`mouseenter`, alertH1);
+// };
+// h1.addEventListener(`mouseenter`, alertH1);
+
+//! OLD WAY OF USING EVENT-LISTENERS
+// h1.onmouseenter = (e) => {
+//   alert(`onMouseEnter: you entered the heading zone.`);
+// };
+
+// //rgb(255,255,255)
+// const randomInt = (min, max) => {
+//   return Math.round(Math.random() * (max - min) + 1 + min);
+// };
+
+// const randomColor = () => {
+//   return `rgb(${randomInt(0, 255)},${randomInt(0, 255)},${randomInt(0, 255)})`;
+// };
+
+// document.querySelector(`.nav__link`).addEventListener(`click`, function (e) {
+//   this.style.backgroundColor = randomColor();
+//   //* e.target logs the element we are targeting or is affected.
+//   //* e.current target gives us the element the event-handler is attached to.
+//   console.log(`link`, e.target, e.currentTarget);
+//   console.log(e.currentTarget === this);
+
+//   //stops propagation
+//   // e.stopPropagation(); //! usually not a good idea to stop event propagation in real-world
+// });
+// document.querySelector(`.nav__links`).addEventListener(`click`, (e) => {
+//   e.currentTarget.style.backgroundColor = randomColor();
+//   console.log(`container`, e.target, e.currentTarget);
+// });
+// document.querySelector(`.nav`).addEventListener(`click`, function (e) {
+//   e.currentTarget.style.backgroundColor = randomColor();
+//   console.log(`nav`, e.target, e.currentTarget);
+// });
+///////////////////////////////////////
+///////////////////////////////////////
+// console.log(`document`, document.documentElement);
+// console.log(`document`, document.head);
+// console.log(`document`, document.body);
+
+// const allSections = document.querySelectorAll(`.section`);
 // console.log(allSections);
 
-// document.getElementById("section--1");
+// document.getElementById(`section--1`);
 
-// const allButtons = document.getElementsByTagName("button");
-// console.log("allButtons", allButtons);
+// const allButtons = document.getElementsByTagName(`button`);
+// console.log(`allButtons`, allButtons);
 
 // //CREATING AND INSERTING CLASSES
-// const message = document.createElement("div");
-// message.classList.add("cookie-message");
-// // message.textContent = "we use cookies for improved functionality and analytics";
+// const message = document.createElement(`div`);
+// message.classList.add(`cookie-message`);
+// // message.textContent = `we use cookies for improved functionality and analytics`;
 // message.innerHTML =
-//   "we use cookies for improved functionality and analytics<button class ='btn btn-close-cookie' >got it!</button>";
+//   `we use cookies for improved functionality and analytics<button class ='btn btn-close-cookie' >got it!</button>`;
 
-// const header = document.querySelector(".header");
+// const header = document.querySelector(`.header`);
 // // header.prepend(message);
 // //This is a live object and cannot be place in more than one place.
 // header.append(message);
@@ -107,31 +225,31 @@ btnScrollTo.addEventListener("click", function (e) {
 // header.after(message);
 
 // //DELETE ELEMENTS
-// const cookieButton = document.querySelector(".btn-close-cookie");
+// const cookieButton = document.querySelector(`.btn-close-cookie`);
 // const deleteCookie = () => {
 //   //new way of removing element
 //   // message.remove();
 //   //old method (DOM TRAVERSING)
 //   // message.parentElement.removeChild(message);
 // };
-// cookieButton.addEventListener("click", deleteCookie);
+// cookieButton.addEventListener(`click`, deleteCookie);
 
 // //STYLES
-// message.style.background = "#37383d";
-// message.style.width = "120%";
+// message.style.background = `#37383d`;
+// message.style.width = `120%`;
 
 // console.log(getComputedStyle(message).color);
 // console.log(getComputedStyle(message).height);
 
 // message.style.height =
-//   Number.parseFloat(getComputedStyle(message).height, 10) + 40 + "px";
+//   Number.parseFloat(getComputedStyle(message).height, 10) + 40 + `px`;
 
 // //setting style using css variable
-// document.documentElement.style.setProperty("--color-primary", "orangeRed");
+// document.documentElement.style.setProperty(`--color-primary`, `orangeRed`);
 
 // //ATTRIBUTES
-// const logo = document.querySelector(".nav__logo");
-// console.log("logo", logo);
+// const logo = document.querySelector(`.nav__logo`);
+// console.log(`logo`, logo);
 // console.log(logo.alt);
 // console.log(logo.className);
 
@@ -139,24 +257,24 @@ btnScrollTo.addEventListener("click", function (e) {
 // // console.log(logo.designer);
 
 // //getting non standard property
-// console.log(logo.getAttribute("designer"));
+// console.log(logo.getAttribute(`designer`));
 
 // // setting the attributes
-// logo.alt = "Beautiful minimalist logo";
-// logo.setAttribute("company", "Bankist");
+// logo.alt = `Beautiful minimalist logo`;
+// logo.setAttribute(`company`, `Bankist`);
 
 // //this will log absolute  path
 // console.log(logo.src);
 
 // //this will get relative path
-// console.log(logo.getAttribute("src"));
+// console.log(logo.getAttribute(`src`));
 
-// const link = document.querySelector(".nav__link--btn");
+// const link = document.querySelector(`.nav__link--btn`);
 // //this will print the absolute path
 // console.log(link.href);
 
 // //this will give relative path that is in html document.
-// console.log(link.getAttribute("href"));
+// console.log(link.getAttribute(`href`));
 
 // //DATA-ATTRIBUTE (needs to start with word data in html)
 // console.log(logo.dataset.versionNumber);
@@ -168,4 +286,4 @@ btnScrollTo.addEventListener("click", function (e) {
 // logo.classList.contains();
 
 // //don't use this (it will overwrite the existing classes)
-// logo.className = "jonas"
+// logo.className = `jonas`
