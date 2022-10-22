@@ -145,6 +145,31 @@ nav.addEventListener("mouseover", handleHover.bind(0.5));
 //to undo mouse enter event
 nav.addEventListener("mouseout", handleHover.bind(1));
 
+//////////////////////////////////////////////////
+//* Sticky Navigation
+//////////////////////////////////////////////////
+
+//! /////////////////////////////////////
+//! OLDER METHODS
+//! /////////////////////////////////////
+
+//! OLD METHOD FOR STICKY NAVIGATION
+// const initialCoords = section1.getBoundingClientRect();
+
+// window.addEventListener(`scroll`, () => {
+//   console.log(window.scrollY);
+//   if (window.scrollY > initialCoords.top) {
+//     nav.classList.add("sticky");
+//   } else {
+//     nav.classList.remove("sticky");
+//   }
+// });
+
+//! OLD WAY OF USING EVENT-LISTENERS
+// h1.onmouseenter = (e) => {
+//   alert(`onMouseEnter: you entered the heading zone.`);
+// };
+
 //! /////////////////////////////////////
 //! practice code below
 //! /////////////////////////////////////
@@ -190,11 +215,6 @@ nav.addEventListener("mouseout", handleHover.bind(1));
 //   h1.removeEventListener(`mouseenter`, alertH1);
 // };
 // h1.addEventListener(`mouseenter`, alertH1);
-
-//! OLD WAY OF USING EVENT-LISTENERS
-// h1.onmouseenter = (e) => {
-//   alert(`onMouseEnter: you entered the heading zone.`);
-// };
 
 // //rgb(255,255,255)
 // const randomInt = (min, max) => {
