@@ -317,7 +317,6 @@ const slider = function () {
 
   //*using arrow keys to change the slide
   document.addEventListener("keydown", (e) => {
-    console.log(e);
     // arrow key changes slide
     if (e.key === "ArrowRight") nextSlide();
     //or you can als0 use short circuiting for syntax
